@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/JiyoonZ/todoList-react-project/static/js/main.d3806433.js",
-    "index.html": "/JiyoonZ/todoList-react-project/index.html",
-    "main.d3806433.js.map": "/JiyoonZ/todoList-react-project/static/js/main.d3806433.js.map"
+    "main.js": "/todoList-react-project/static/js/main.42e6d14a.js",
+    "index.html": "/todoList-react-project/index.html",
+    "main.42e6d14a.js.map": "/todoList-react-project/static/js/main.42e6d14a.js.map"
   },
   "entrypoints": [
-    "static/js/main.d3806433.js"
+    "static/js/main.42e6d14a.js"
   ]
 }
