@@ -33,12 +33,15 @@ export const todoState = atom<ITodo[]>({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
-
 // category 목록
+const existedCategories = JSON.parse(
+  localStorage.getItem("categories") as string
+);
 export const categoriesState = atom<string[]>({
   key: "categories",
-  default: JSON.parse(localStorage.getItem("categories") as string),
+  default: existedCategories ? existedCategories : ["TODO", "DOING", "DONE"],
 });
+
 //selector
 export const todoSelector = selector({
   key: "todoSelector",

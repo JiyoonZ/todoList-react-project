@@ -1,17 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import {useForm} from "react-hook-form";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import {categoriesState, categoryState} from "../atoms";
-
+import styled from "styled-components";
 interface IForm {
   newCategory: string;
 }
 function CategoryNav() {
-  const [category, setCategory] = useRecoilState<string>(categoryState);
+  const setCategory = useSetRecoilState(categoryState);
   const [categories, setCategories] = useRecoilState<string[]>(categoriesState);
   const {register, handleSubmit} = useForm<IForm>();
-  const onInput = (evt: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(evt.currentTarget.value as any);
+  const [active, setActive] = useState("TODO");
+  const clickHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    const activeCategory = evt.currentTarget.value;
+    setCategory(activeCategory as any);
+    setActive(activeCategory);
   };
   const onValid = ({newCategory}: IForm) => {
     console.log("new", newCategory);
@@ -19,22 +22,22 @@ function CategoryNav() {
       return [...prev, newCategory];
     });
   };
+
   localStorage.setItem("categories", JSON.stringify(categories));
-  console.log("update", categories);
   return (
     <div>
-      <select value={category} onInput={onInput}>
-        {categories.map((ele, idx) => {
-          return (
-            <option key={idx} value={ele}>
-              {ele}
-            </option>
-          );
-        })}
-        {/* <option value="TODO">To do</option>
-        <option value="DOING">Doing</option>
-        <option value="DONE">Done</option> */}
-      </select>
+      {categories.map((ele, idx) => {
+        return (
+          <Button
+            key={idx}
+            value={ele}
+            isActive={ele === active}
+            onClick={clickHandler}
+          >
+            {ele}
+          </Button>
+        );
+      })}
       <form onSubmit={handleSubmit(onValid)}>
         <input
           placeholder="add your category"
@@ -47,4 +50,12 @@ function CategoryNav() {
     </div>
   );
 }
+const Button = styled.button<{isActive: boolean}>`
+  height: 30px;
+  border: none;
+  margin: 2px;
+  border-radius: 4px;
+  color: ${(props) => (props.isActive ? "red" : "black")};
+`;
+
 export default CategoryNav;

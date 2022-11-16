@@ -13,19 +13,7 @@ import ToDo from "./ToDo";
 
 function TodoList() {
   const todos = useRecoilValue(todoSelector);
-  const [category, setCategory] = useRecoilState(categoryState);
-  const onInput = (evt: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(evt.currentTarget.value as any);
-  };
-  useEffect(() => {
-    const existed = JSON.parse(localStorage.getItem("categories") as string);
-    localStorage.setItem(
-      "categories",
-      existed
-        ? JSON.stringify(existed)
-        : JSON.stringify(["DOING", "DONE", "TODO"])
-    );
-  }, []);
+
   return (
     <div>
       <h1>🚀 TO Do List 🚀</h1>
