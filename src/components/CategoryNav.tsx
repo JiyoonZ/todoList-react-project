@@ -9,7 +9,7 @@ interface IForm {
 function CategoryNav() {
   const setCategory = useSetRecoilState(categoryState);
   const [categories, setCategories] = useRecoilState<string[]>(categoriesState);
-  const {register, handleSubmit} = useForm<IForm>();
+  const {register, handleSubmit, setValue} = useForm<IForm>();
   const [active, setActive] = useState("TODO");
   const clickHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
     const activeCategory = evt.currentTarget.value;
@@ -21,6 +21,7 @@ function CategoryNav() {
     setCategories((prev) => {
       return [...prev, newCategory];
     });
+    setValue("newCategory", "");
   };
 
   localStorage.setItem("categories", JSON.stringify(categories));
