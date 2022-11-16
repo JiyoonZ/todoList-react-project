@@ -41,21 +41,31 @@ interface IForm {
   email: string;
   password: string;
   password1: string;
+  extraError?: string;
 }
 function ToDoList() {
   const {
     register,
     handleSubmit,
     formState: {errors},
+    setError,
   } = useForm<IForm>({
     defaultValues: {
       email: "@naver.com",
     },
   });
-  const onValid = (data: any) => {
+  const onValid = (data: IForm) => {
     console.log(data);
+    if (data.password !== data.password1) {
+      return setError(
+        "password1",
+        {message: "Password are not the same"},
+        {shouldFocus: true}
+      );
+    }
+    // setError("extraError", {message: "Server offline"});
   };
-  console.log("에러메세지", errors);
+  console.log("에러", errors);
   return (
     <div>
       <form
@@ -87,17 +97,31 @@ function ToDoList() {
         />
         <input
           placeholder="Username"
-          {...register("username", {required: true})}
+          {...register("username", {
+            required: true,
+            validate: {
+              noZee: (value) =>
+                value.includes("zee") ? "no zee allowed" : true,
+
+              noZEE: (value) =>
+                value.includes("ZEE") ? "no ZEE allowed" : true,
+            },
+          })}
         />
+
+        <span>{errors?.username?.message}</span>
         <input
           placeholder="Password"
-          {...register("password", {required: true, minLength: 5})}
+          {...register("password", {required: "password !", minLength: 5})}
         />
+        <span>{errors?.password?.message}</span>
         <input
           placeholder="Password1"
-          {...register("password1", {required: true, minLength: 5})}
+          {...register("password1", {required: "password !", minLength: 5})}
         />
+        <span>{errors?.password1?.message}</span>
         <button>Add</button>
+        <span>{errors?.extraError?.message}</span>
       </form>
     </div>
   );
