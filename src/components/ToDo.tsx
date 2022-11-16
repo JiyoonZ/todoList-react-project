@@ -1,6 +1,6 @@
 import React from "react";
 import {useSetRecoilState} from "recoil";
-import {Categories, ITodo, todoState} from "../atoms";
+import {ITodo, todoState} from "../atoms";
 
 // 1. target 의 경로찾기 id로 수정할 todo 찾기 [index 찾기]
 // 2. 새로운 todo 를 만들어서 수정하기
@@ -29,18 +29,18 @@ function ToDo({text, category, id}: ITodo) {
   return (
     <li>
       <span>{text} </span>
-      {category !== Categories.TODO && (
-        <button name={Categories.TODO} onClick={clickHandler}>
+      {category !== "TODO" && (
+        <button name="TODO" onClick={clickHandler}>
           To do
         </button>
       )}
-      {category !== Categories.DOING && (
-        <button name={Categories.DOING} onClick={clickHandler}>
+      {category !== "DOING" && (
+        <button name="DOING" onClick={clickHandler}>
           Doing
         </button>
       )}
-      {category !== Categories.DONE && (
-        <button name={Categories.DONE} onClick={clickHandler}>
+      {category !== "DONE" && (
+        <button name="DONE" onClick={clickHandler}>
           Done
         </button>
       )}

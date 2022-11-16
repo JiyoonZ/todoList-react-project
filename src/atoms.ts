@@ -1,20 +1,19 @@
 import {atom, selector} from "recoil";
 import {recoilPersist} from "recoil-persist";
 // type categories = "TODO" | "DOING" | "DONE";
-
 // enum 은 문자열이 아닌 일련의 숫자를 부여함
 // 따라서 실제값은 "TODO" 가 아닌 1
 // 데이터를 유의미하게 주고싶다면
 // "TODO" = "TODO"
-export enum Categories {
-  "TODO" = "TODO",
-  "DOING" = "DOING",
-  "DONE" = "DONE",
-}
+// export enum Categories {
+//   "TODO" = "TODO",
+//   "DOING" = "DOING",
+//   "DONE" = "DONE",
+// }
 export interface ITodo {
   id: number;
   text: string;
-  category: Categories;
+  category: string;
 }
 
 const {persistAtom} = recoilPersist({
@@ -22,9 +21,10 @@ const {persistAtom} = recoilPersist({
   storage: localStorage,
 });
 
-export const categoryState = atom<Categories>({
+// 현재 active 중인 category
+export const categoryState = atom<string>({
   key: "category",
-  default: Categories.TODO,
+  default: "TODO",
   //defailt : "TODO"
 });
 //atom 생성
@@ -34,6 +34,11 @@ export const todoState = atom<ITodo[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
+// category 목록
+export const categoriesState = atom<string[]>({
+  key: "categories",
+  default: JSON.parse(localStorage.getItem("categories") as string),
+});
 //selector
 export const todoSelector = selector({
   key: "todoSelector",
