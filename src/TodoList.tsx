@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
+import {DefaultValue} from "recoil";
 
 /**
 function ToDoList() {
@@ -33,12 +34,28 @@ function ToDoList() {
 }
  */
 
+interface IForm {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  password1: string;
+}
 function ToDoList() {
-  const {register, handleSubmit, formState} = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<IForm>({
+    defaultValues: {
+      email: "@naver.com",
+    },
+  });
   const onValid = (data: any) => {
     console.log(data);
   };
-  console.log(formState.errors);
+  console.log("에러메세지", errors);
   return (
     <div>
       <form
@@ -53,8 +70,13 @@ function ToDoList() {
               value: 5,
               message: "Your password is too short.",
             },
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+              message: "Only naver.com emails allowed",
+            },
           })}
         />
+        <span>{errors?.email?.message}</span>
         <input
           placeholder="FirstName"
           {...register("firstName", {required: true})}
