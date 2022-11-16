@@ -1,10 +1,9 @@
 import GlobalStyle from "./GlobalStyle";
-import ToDoList from "./TodoList";
+import ToDoList from "./components/TodoList";
 
 function App() {
   return (
     <>
-      <div>Hello TodoList!</div>
       <GlobalStyle />
       <ToDoList />
     </>
