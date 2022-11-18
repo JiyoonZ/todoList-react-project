@@ -3,6 +3,8 @@ import {Draggable} from "react-beautiful-dnd";
 import {useRecoilState} from "recoil";
 import {todoState} from "../atoms";
 import styled from "styled-components";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
 
 const Card = styled.div<{isDragging: boolean}>`
   border-radius: 5px;
@@ -12,6 +14,16 @@ const Card = styled.div<{isDragging: boolean}>`
     props.isDragging ? "#74b9ff" : props.theme.cardColor};
   box-shadow: ${(props) =>
     props.isDragging ? "0px 2px 5px rgba(0,0,0,0.05)" : ""};
+  display: flex;
+  justify-content: space-between;
+  .xmark {
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    background-color: rgba(214, 48, 49, 0.5);
+  }
 `;
 interface IDraggableProps {
   todoId: number;
@@ -29,6 +41,7 @@ function DraggableCard({todoText, todoId, index}: IDraggableProps) {
           {...magic.dragHandleProps}
         >
           {todoText}
+          <FontAwesomeIcon icon={faXmark} className="xmark" />
         </Card>
       )}
     </Draggable>

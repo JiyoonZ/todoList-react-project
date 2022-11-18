@@ -35,10 +35,31 @@ const Area = styled.div<IAreaProps>`
   padding: 20px;
 `;
 const Form = styled.form`
-  width: 100%;
-  input {
-    width: 100%;
+  width: 80%;
+  margin: auto;
+  &:focus {
+    border: none;
   }
+`;
+const Input = styled.input`
+  border: none;
+  width: 90%;
+  height: 40px;
+  font-size: 18px;
+  background-color: transparent;
+  border-bottom: 3px dotted white;
+  outline: none;
+`;
+const Button = styled.button`
+  /* outline: none; */
+  border: none;
+  background-color: ${(props) => props.theme.bgColor};
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 50%;
 `;
 interface IBoard {
   todos: ITodo[];
@@ -65,13 +86,14 @@ function Board({todos, boardId}: IBoard) {
     <Wrapper>
       <Title>{boardId.toUpperCase()}</Title>
       <Form onSubmit={handleSubmit(onValid)}>
-        <input
+        <Input
           {...register("todo", {
             required: true,
           })}
           type="text"
           placeholder={`Add task on ${boardId}`}
         />
+        <Button>+</Button>
       </Form>
       <Droppable droppableId={boardId}>
         {(magic, info) => (

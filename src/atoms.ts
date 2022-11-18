@@ -1,37 +1,3 @@
-// export interface ITodo {
-//   id: number;
-//   text: string;
-//   category: string;
-// }
-
-// const {persistAtom} = recoilPersist({
-//   key: "todosList",
-//   storage: localStorage,
-// });
-
-// // 현재 active 중인 category
-// export const categoryState = atom<string>({
-//   key: "category",
-//   default: "TODO",
-//   //defailt : "TODO"
-// });
-// //atom 생성
-// interface ITodoState {
-//   [key: string]: ITodo[];
-// }
-// export interface ITodo {
-//   id: number;
-//   text: string;
-// }
-// export const todoState = atom<ITodoState>({
-//   key: "todo",
-//   default: {
-//     "To do": [],
-//     Doing: [],
-//     done: [],
-//   },
-// });
-
 // // category 목록
 // const existedCategories = JSON.parse(
 //   localStorage.getItem("categories") as string
@@ -74,4 +40,12 @@ export const todoState = atom<ITodoState>({
     done: [],
   },
   effects_UNSTABLE: [persistAtom],
+});
+
+const existedCategories = JSON.parse(
+  localStorage.getItem("categories") as string
+);
+export const categoriesState = atom<string[]>({
+  key: "categories",
+  default: existedCategories ? existedCategories : ["TODO", "DOING", "DONE"],
 });
