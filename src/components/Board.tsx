@@ -50,7 +50,7 @@ const Input = styled.input`
   border-bottom: 3px dotted white;
   outline: none;
 `;
-const Button = styled.button`
+export const Button = styled.button`
   /* outline: none; */
   border: none;
   background-color: ${(props) => props.theme.bgColor};
@@ -60,6 +60,7 @@ const Button = styled.button`
   font-weight: 700;
   font-size: 15px;
   border-radius: 50%;
+  cursor: pointer;
 `;
 interface IBoard {
   todos: ITodo[];

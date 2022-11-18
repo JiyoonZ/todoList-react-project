@@ -2,9 +2,17 @@ import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {useRecoilState} from "recoil";
 import styled from "styled-components";
 import {todoState} from "../atoms";
-import Board from "./Board";
+import Board, {Button} from "./Board";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import React, {useRef} from "react";
+import {useForm} from "react-hook-form";
+interface IForm {
+  board: string;
+}
 function TodoList() {
+  const {register, setValue, handleSubmit} = useForm<IForm>();
   const [todos, setTodos] = useRecoilState(todoState);
   const onDragEnd = (info: DropResult) => {
     const {destination, source} = info;
@@ -43,25 +51,88 @@ function TodoList() {
       });
     }
   };
+  const onValid = (data: IForm) => {
+    console.log(data.board, data);
+    setValue("board", "");
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <h1>🚀 BOOM!</h1>
+      <Title>🏁 My Todo List 🏁</Title>
+      <DeleteIcon>
+        <FontAwesomeIcon icon={faTrash} />
+      </DeleteIcon>
       <Wrapper>
         <Boards>
           {Object.keys(todos).map((boardId) => (
             <Board boardId={boardId} key={boardId} todos={todos[boardId]} />
           ))}
+          <AddBoard onSubmit={handleSubmit(onValid)}>
+            <AddButton>+</AddButton>
+            <Input
+              {...register("board", {
+                required: true,
+              })}
+              type="text"
+              placeholder="Add your board!"
+            />
+          </AddBoard>
         </Boards>
       </Wrapper>
     </DragDropContext>
   );
 }
+const Input = styled.input`
+  outline: none;
+  background-color: transparent;
+  border: none;
+  padding-bottom: 10px;
+  border-bottom: 1px solid white;
+  color: white;
+  &::placeholder {
+    text-align: center;
+    color: white;
+  }
+`;
+const AddButton = styled(Button)`
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+`;
+const AddBoard = styled.form`
+  color: white;
+  text-align: center;
+  padding-top: 20px;
+  width: 150px;
+  height: 120px;
+  border-radius: 5px;
+  /* background-color: rgba(0, 0, 0, 0.4); */
+`;
+const DeleteIcon = styled.div`
+  color: white;
+  width: 60px;
+  font-size: 30px;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+`;
+const Title = styled.div`
+  font-weight: bold;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+`;
 const Wrapper = styled.div`
   display: flex;
   width: 100vw;
   margin: 0 auto;
-  justify-content: center;
-  align-items: center;
+  margin-top: 30px;
+  /* border: 1px solid white; */
+  /* justify-content: center; */
+  /* align-items: center; */
   height: 100vh;
 `;
 const Boards = styled.div`
