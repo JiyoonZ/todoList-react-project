@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   min-height: 300px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
 `;
 const Title = styled.div`
   font-weight: 700;
@@ -83,9 +84,16 @@ function Board({todos, boardId}: IBoard) {
       return {...allBoards, [boardId]: [newTodo, ...allBoards[boardId]]};
     });
   };
+  const delBoard = () => {
+    setTodos((prev) => {
+      const {[`${boardId}`]: delkey, ...otherAnimal} = prev;
+      return otherAnimal;
+    });
+  };
   return (
     <Wrapper>
       <Title>{boardId.toUpperCase()}</Title>
+      <button onClick={delBoard}>삭제</button>
       <Form onSubmit={handleSubmit(onValid)}>
         <Input
           {...register("todo", {
