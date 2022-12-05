@@ -53,6 +53,9 @@ function TodoList() {
   };
   const onValid = (data: IForm) => {
     console.log(data.board, data);
+    setTodos((prev) => {
+      return {...prev, [data.board]: []};
+    });
     setValue("board", "");
   };
   return (
@@ -86,11 +89,11 @@ const Input = styled.input`
   background-color: transparent;
   border: none;
   padding-bottom: 10px;
-  border-bottom: 1px solid white;
-  color: white;
+  border-bottom: 1px solid ${(props) => props.theme.accentColor};
+  color: ${(props) => props.theme.accentColor};
   &::placeholder {
     text-align: center;
-    color: white;
+    color: ${(props) => props.theme.accentColor};
   }
 `;
 const AddButton = styled(Button)`
@@ -99,6 +102,7 @@ const AddButton = styled(Button)`
   font-size: 30px;
   margin-bottom: 20px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+  background-color: ${(props) => props.theme.accentColor};
 `;
 const AddBoard = styled.form`
   color: white;
@@ -140,6 +144,6 @@ const Boards = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  gap: 10px;
+  gap: 15px;
 `;
 export default TodoList;

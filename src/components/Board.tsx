@@ -7,12 +7,14 @@ import DraggableCard from "./DraggableCard";
 
 const Wrapper = styled.div`
   width: 300px;
-  padding-top: 10px;
+  padding: 15px 0;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
   min-height: 300px;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
+  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
 `;
 const Title = styled.div`
   font-weight: 700;
@@ -83,6 +85,17 @@ function Board({todos, boardId}: IBoard) {
       return {...allBoards, [boardId]: [newTodo, ...allBoards[boardId]]};
     });
   };
+  const delBoard = () => {
+    const isClose = window.confirm(
+      "삭제하시면 todo도 모두 삭제됩니다. 삭제하시겠습니까?"
+    );
+    if (isClose) {
+      setTodos((prev) => {
+        const {[`${boardId}`]: delkey, ...otherAnimal} = prev;
+        return otherAnimal;
+      });
+    }
+  };
   return (
     <Wrapper>
       <Title>{boardId.toUpperCase()}</Title>
@@ -117,8 +130,20 @@ function Board({todos, boardId}: IBoard) {
           </Area>
         )}
       </Droppable>
+      <DelBtn onClick={delBoard}>삭제</DelBtn>
     </Wrapper>
   );
 }
 
+const DelBtn = styled.button`
+  border: none;
+  width: 50px;
+  height: 30px;
+  background-color: rgba(214, 48, 49, 0.5);
+  color: white;
+  border-radius: 15px;
+  align-self: flex-start;
+  margin-left: 15px;
+  cursor: pointer;
+`;
 export default Board;
