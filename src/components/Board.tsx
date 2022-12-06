@@ -98,7 +98,7 @@ function Board({todos, boardId}: IBoard) {
   };
   return (
     <Wrapper>
-      <Title>{boardId.toUpperCase()}</Title>
+      <Title>{boardId}</Title>
       <Form onSubmit={handleSubmit(onValid)}>
         <Input
           {...register("todo", {

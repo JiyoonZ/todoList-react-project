@@ -52,11 +52,13 @@ function TodoList() {
     }
   };
   const onValid = (data: IForm) => {
-    console.log(data.board, data);
+    setValue("board", "");
+    if (Object.keys(todos).includes(data.board)) {
+      return alert(`이미 "${data.board}" 보드가 존재합니다.`);
+    }
     setTodos((prev) => {
       return {...prev, [data.board]: []};
     });
-    setValue("board", "");
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
