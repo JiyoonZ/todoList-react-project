@@ -90,17 +90,17 @@ function TodoList() {
           {Object.keys(todos).map((boardId) => (
             <Board key={boardId} boardId={boardId} todos={todos[boardId]} />
           ))}
-          <AddBoard onSubmit={handleSubmit(onValid)}>
-            <AddButton>+</AddButton>
-            <Input
-              {...register("board", {
-                required: true,
-              })}
-              type="text"
-              placeholder="Add your board!"
-            />
-          </AddBoard>
         </Boards>
+        <AddBoard onSubmit={handleSubmit(onValid)}>
+          <AddButton>+</AddButton>
+          <Input
+            {...register("board", {
+              required: true,
+            })}
+            type="text"
+            placeholder="Add your board!"
+          />
+        </AddBoard>
       </Wrapper>
     </DragDropContext>
   );
@@ -128,10 +128,13 @@ const AddButton = styled(Button)`
 const AddBoard = styled.form`
   color: white;
   text-align: center;
-  padding-top: 20px;
+  padding: 20px 0 0 20px;
   width: 150px;
   height: 120px;
   border-radius: 5px;
+  @media screen and (max-width: 780px) {
+    margin: auto;
+  }
 `;
 interface IDelProps {
   isDraggingOver: boolean;
@@ -146,9 +149,17 @@ const DeleteArea = styled.div<IDelProps>`
   right: 35px;
   top: 30px;
   border-radius: 14px;
-  div:nth-child(2){
+  div:nth-child(2) {
     text-align: center;
     margin-top: 6px;
+  }
+  @media screen and (max-width: 780px) {
+    div:nth-child(2) {
+      display: none;
+    }
+    height: 30px;
+    width: 50px;
+    top: 70px;
   }
 `;
 const DelIcon = styled.div`
@@ -156,6 +167,10 @@ const DelIcon = styled.div`
   justify-content: center;
   font-size: 30px;
   padding-top: 10px;
+  @media screen and (max-width: 780px) {
+    font-size: 15px;
+    padding-top: 5px;
+  }
 `;
 const Title = styled.div`
   font-weight: bold;
@@ -167,17 +182,25 @@ const Title = styled.div`
 `;
 const Wrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
   width: 100vw;
-  margin: 0 auto;
+  @media screen and (max-width: 780px) {
+    flex-direction: column;
+
+  }
   margin-top: 30px;
-  /* height: 100vh; */
 `;
 const Boards = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 300px);
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
+  grid-template-columns: repeat(3, auto);
   gap: 15px;
+  @media screen and (max-width: 1060px) {
+    grid-template-columns: repeat(2, auto);
+  }
+  @media screen and (max-width: 780px) {
+    grid-template-columns: repeat(1, auto);
+    margin : auto;
+  }
 `;
 export default TodoList;

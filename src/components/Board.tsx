@@ -47,56 +47,65 @@ function Board({todos, boardId}: IBoard) {
         />
         <Button>+</Button>
       </Form>
-      <Droppable droppableId={boardId}>
-        {(magic, info) => (
-          <Area
-            isDraggingOver={info.isDraggingOver}
-            draggingFromThisWith={Boolean(info.draggingFromThisWith)}
-            ref={magic.innerRef}
-            {...magic.droppableProps}
-          >
-            {todos.map((todo, index) => (
-              <DraggableCard
-                key={todo.id}
-                index={index}
-                todoId={todo.id}
-                todoText={todo.text}
-                boardId={boardId}
-              />
-            ))}
-            {/* 요소가 드래그될때마다 빈곳의 크기가 변하는거 방지 */}
-            {magic.placeholder}
-          </Area>
-        )}
-      </Droppable>
-      <DelBtn onClick={delBoard}>삭제</DelBtn>
+      <TodoListArea>
+        <Droppable droppableId={boardId}>
+          {(magic, info) => (
+            <Area
+              isDraggingOver={info.isDraggingOver}
+              draggingFromThisWith={Boolean(info.draggingFromThisWith)}
+              ref={magic.innerRef}
+              {...magic.droppableProps}
+            >
+              {todos.map((todo, index) => (
+                <DraggableCard
+                  key={todo.id}
+                  index={index}
+                  todoId={todo.id}
+                  todoText={todo.text}
+                  boardId={boardId}
+                />
+              ))}
+              {/* 요소가 드래그될때마다 빈곳의 크기가 변하는거 방지 */}
+              {magic.placeholder}
+            </Area>
+          )}
+        </Droppable>
+        <DelBtn onClick={delBoard}>삭제</DelBtn>
+      </TodoListArea>
     </Wrapper>
   );
 }
 
 const DelBtn = styled.button`
   border: none;
-  width: 50px;
-  height: 30px;
+  right: 10px;
+  width: 40px;
+  height: 25px;
   background-color: rgba(214, 48, 49, 0.5);
   color: white;
   border-radius: 15px;
   align-self: flex-start;
   margin-left: 15px;
   cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 12px;
 `;
-export default Board;
+
 
 const Wrapper = styled.div`
-  width: 300px;
+  position: relative;
+  min-width: 330px;
   padding: 15px 0;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
-  min-height: 300px;
   display: flex;
-  overflow: hidden;
   flex-direction: column;
   box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
+`;
+const TodoListArea = styled.div`
+  height: 300px;
+  overflow-y: scroll;
 `;
 const Title = styled.div`
   font-weight: 700;
@@ -145,3 +154,5 @@ export const Button = styled.button`
   border-radius: 50%;
   cursor: pointer;
 `;
+
+export default Board;

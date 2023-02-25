@@ -13,10 +13,10 @@ interface IDraggableProps {
   boardId : string;
 }
 function DraggableCard({todoText, todoId, index, boardId}: IDraggableProps) {
-  const [todoList, setTodoList] = useRecoilState(todoState);
+  const [todos, setTodos] = useRecoilState(todoState);
   const delTodoHandler = (todoId: number) => {
-    setTodoList((prev) => {
-      const updateTodo = todoList[boardId].filter((todo) => todo.id !== todoId);
+    setTodos((prev) => {
+      const updateTodo = todos[boardId].filter((todo) => todo.id !== todoId);
         return {...prev, [boardId]: updateTodo};
     })
   };
