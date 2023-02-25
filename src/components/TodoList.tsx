@@ -1,22 +1,23 @@
-import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import {DragDropContext, DropResult, Droppable} from "react-beautiful-dnd";
 import {useRecoilState} from "recoil";
 import styled from "styled-components";
 import {todoState} from "../atoms";
 import Board, {Button} from "./Board";
-
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
-import React, {useRef} from "react";
 import {useForm} from "react-hook-form";
-interface IForm {
+import { ITodoList } from "../type";
+
+export interface IForm {
   board: string;
 }
 function TodoList() {
   const {register, setValue, handleSubmit} = useForm<IForm>();
-  const [todos, setTodos] = useRecoilState(todoState);
+  const [todos, setTodos] = useRecoilState<ITodoList>(todoState);
+
   const onDragEnd = (info: DropResult) => {
-    const {destination, source} = info;
-    console.log(info);
+    const {destination, source, draggableId} = info;
+    console.log(info, '드래그 확인')
     if (!destination) return;
     // board ID 체크하기
     if (destination?.droppableId === source.droppableId) {
@@ -34,8 +35,12 @@ function TodoList() {
           [source.droppableId]: boardCopy,
         };
       });
-    }
-    if (destination?.droppableId !== source.droppableId) {
+    } else if(destination?.droppableId === "delete") {
+       setTodos((prev) => {
+         const updateTodo = todos[source.droppableId].filter((todo) => String(todo.id) !== draggableId);
+         return {...prev, [source.droppableId]: updateTodo};
+       });
+    } else if (destination?.droppableId !== source.droppableId) {
       setTodos((allBoards) => {
         // 출발할 보드 , 도착할 보드 복사하기
         const sourceBoard = [...allBoards[source.droppableId]];
@@ -63,25 +68,39 @@ function TodoList() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Title>🏁 My Todo List 🏁</Title>
-      <DeleteIcon>
-        <FontAwesomeIcon icon={faTrash} />
-      </DeleteIcon>
+      <Droppable droppableId={"delete"}>
+        {(magic, info) => (
+          <>
+            <DeleteArea
+              isDraggingOver={info.isDraggingOver}
+              ref={magic.innerRef}
+              {...magic.droppableProps}
+            >
+              <DelIcon>
+                <FontAwesomeIcon icon={faTrash} />
+              </DelIcon>
+              <div>drag and drop!</div>
+              {magic.placeholder}
+            </DeleteArea>
+          </>
+        )}
+      </Droppable>
       <Wrapper>
         <Boards>
           {Object.keys(todos).map((boardId) => (
-            <Board boardId={boardId} key={boardId} todos={todos[boardId]} />
+            <Board key={boardId} boardId={boardId} todos={todos[boardId]} />
           ))}
-          <AddBoard onSubmit={handleSubmit(onValid)}>
-            <AddButton>+</AddButton>
-            <Input
-              {...register("board", {
-                required: true,
-              })}
-              type="text"
-              placeholder="Add your board!"
-            />
-          </AddBoard>
         </Boards>
+        <AddBoard onSubmit={handleSubmit(onValid)}>
+          <AddButton>+</AddButton>
+          <Input
+            {...register("board", {
+              required: true,
+            })}
+            type="text"
+            placeholder="Add your board!"
+          />
+        </AddBoard>
       </Wrapper>
     </DragDropContext>
   );
@@ -109,19 +128,49 @@ const AddButton = styled(Button)`
 const AddBoard = styled.form`
   color: white;
   text-align: center;
-  padding-top: 20px;
+  padding: 20px 0 0 20px;
   width: 150px;
   height: 120px;
   border-radius: 5px;
-  /* background-color: rgba(0, 0, 0, 0.4); */
+  @media screen and (max-width: 780px) {
+    margin: auto;
+  }
 `;
-const DeleteIcon = styled.div`
+interface IDelProps {
+  isDraggingOver: boolean;
+}
+const DeleteArea = styled.div<IDelProps>`
+  background-color: ${(props) =>
+    props.isDraggingOver ? "#ef9da9" : "#b2bec3"};
   color: white;
-  width: 60px;
-  font-size: 30px;
+  width: 120px;
+  height: 70px;
   position: absolute;
-  right: 10px;
+  right: 35px;
   top: 30px;
+  border-radius: 14px;
+  div:nth-child(2) {
+    text-align: center;
+    margin-top: 6px;
+  }
+  @media screen and (max-width: 780px) {
+    div:nth-child(2) {
+      display: none;
+    }
+    height: 30px;
+    width: 50px;
+    top: 70px;
+  }
+`;
+const DelIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  padding-top: 10px;
+  @media screen and (max-width: 780px) {
+    font-size: 15px;
+    padding-top: 5px;
+  }
 `;
 const Title = styled.div`
   font-weight: bold;
@@ -133,19 +182,25 @@ const Title = styled.div`
 `;
 const Wrapper = styled.div`
   display: flex;
-  width: 100vw;
-  margin: 0 auto;
-  margin-top: 30px;
-  /* border: 1px solid white; */
-  /* justify-content: center; */
-  /* align-items: center; */
-  height: 100vh;
-`;
-const Boards = styled.div`
-  display: flex;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
+  width: 100vw;
+  @media screen and (max-width: 780px) {
+    flex-direction: column;
+
+  }
+  margin-top: 30px;
+`;
+const Boards = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, auto);
   gap: 15px;
+  @media screen and (max-width: 1060px) {
+    grid-template-columns: repeat(2, auto);
+  }
+  @media screen and (max-width: 780px) {
+    grid-template-columns: repeat(1, auto);
+    margin : auto;
+  }
 `;
 export default TodoList;

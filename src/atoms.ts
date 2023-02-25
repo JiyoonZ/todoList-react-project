@@ -1,51 +1,22 @@
-// // category 목록
-// const existedCategories = JSON.parse(
-//   localStorage.getItem("categories") as string
-// );
-// export const categoriesState = atom<string[]>({
-//   key: "categories",
-//   default: existedCategories ? existedCategories : ["TODO", "DOING", "DONE"],
-// });
-
-// //selector
-// export const todoSelector = selector({
-//   key: "todoSelector",
-//   get: ({get}) => {
-//     const todos = get(todoState);
-//     const category = get(categoryState);
-//     return todos[category];
-//   },
-// });
-
-import {atom, selector} from "recoil";
+import {atom} from "recoil";
 import {recoilPersist} from "recoil-persist";
+import {ITodoList} from "./type";
 
 const {persistAtom} = recoilPersist({
   key: "todosList",
   storage: localStorage,
 });
-//새로운 카테고리가 추가될 수도 있기때문에 아래처럼 Interface 작성하기
-interface ITodoState {
-  [key: string]: ITodo[];
+
+const DEFAULT_CATEGORY = {
+  "TODO":[], 
+  "DOING":[], 
+  "DONE":[]
 }
-export interface ITodo {
-  id: number;
-  text: string;
-}
-export const todoState = atom<ITodoState>({
+
+export const todoState = atom<ITodoList>({
   key: "todo",
   default: {
-    // "To do": [],
-    // Doing: [],
-    // Done: [],
+    ...DEFAULT_CATEGORY,
   },
   effects_UNSTABLE: [persistAtom],
-});
-
-const existedCategories = JSON.parse(
-  localStorage.getItem("categories") as string
-);
-export const categoriesState = atom<string[]>({
-  key: "categories",
-  default: existedCategories ? existedCategories : ["TODO", "DOING", "DONE"],
 });
