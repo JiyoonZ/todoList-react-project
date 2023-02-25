@@ -80,16 +80,18 @@ const DelBtn = styled.button`
   border: none;
   right: 10px;
   width: 40px;
-  height: 25px;
-  background-color: rgba(214, 48, 49, 0.5);
-  color: white;
+  height: 22px;
+  background-color: ${(props) => props.theme.bgColor};
+  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
+  color: #f9576f;
+  font-weight: 500;
   border-radius: 15px;
   align-self: flex-start;
   margin-left: 15px;
   cursor: pointer;
   position: absolute;
-  right: 10px;
-  top: 12px;
+  left: 10px;
+  bottom: 15px;
 `;
 
 
@@ -97,14 +99,14 @@ const Wrapper = styled.div`
   position: relative;
   min-width: 330px;
   padding: 15px 0;
-  background-color: ${(props) => props.theme.boardColor};
+  background-color: ${(props) => props.theme.bgColor};
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
 `;
 const TodoListArea = styled.div`
-  height: 300px;
+  height: 325px;
   overflow-y: scroll;
 `;
 const Title = styled.div`
@@ -126,9 +128,11 @@ const Area = styled.div<IAreaProps>`
   flex-grow: 1;
   transition: background-color 0.3s ease-in-out;
   padding: 20px;
+  height: 290px;
+  overflow-y: scroll;
 `;
 const Form = styled.form`
-  width: 80%;
+  width: 82%;
   margin: auto;
   &:focus {
     border: none;
@@ -148,11 +152,12 @@ export const Button = styled.button`
   background-color: ${(props) => props.theme.bgColor};
   width: 20px;
   height: 20px;
-  color: white;
+  color: #9c9c9c;
   font-weight: 700;
   font-size: 15px;
   border-radius: 50%;
   cursor: pointer;
+  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
 `;
 
 export default Board;
