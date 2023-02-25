@@ -17,7 +17,6 @@ function TodoList() {
 
   const onDragEnd = (info: DropResult) => {
     const {destination, source} = info;
-    console.log(info);
     if (!destination) return;
     // board ID 체크하기
     if (destination?.droppableId === source.droppableId) {

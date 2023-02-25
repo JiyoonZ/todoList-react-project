@@ -25,11 +25,11 @@ function Board({todos, boardId}: IBoard) {
   };
   const delBoard = () => {
     const isClose = window.confirm(
-      "삭제하시면 todo도 모두 삭제됩니다. 삭제하시겠습니까?"
+      `모든 ${boardId} 항목들이 삭제됩니다. 삭제하시겠습니까?`
     );
     if (isClose) {
       setTodos((prev) => {
-        const {[`${boardId}`]: delkey, ...otherAnimal} = prev;
+        const {[`${boardId}`]:delkey, ...otherAnimal} = prev;
         return otherAnimal;
       });
     }
@@ -61,6 +61,7 @@ function Board({todos, boardId}: IBoard) {
                 index={index}
                 todoId={todo.id}
                 todoText={todo.text}
+                boardId={boardId}
               />
             ))}
             {/* 요소가 드래그될때마다 빈곳의 크기가 변하는거 방지 */}
