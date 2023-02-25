@@ -1,19 +1,21 @@
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {useRecoilState} from "recoil";
 import styled from "styled-components";
-import {todoState} from "../atoms";
+import {todoState, IForm} from "../atoms";
 import Board, {Button} from "./Board";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
-import React, {useRef} from "react";
 import {useForm} from "react-hook-form";
-interface IForm {
-  board: string;
-}
+
 function TodoList() {
   const {register, setValue, handleSubmit} = useForm<IForm>();
   const [todos, setTodos] = useRecoilState(todoState);
+  console.log(todos, 'test', JSON.parse(
+  localStorage.getItem("categories") as string
+));
+
+
   const onDragEnd = (info: DropResult) => {
     const {destination, source} = info;
     console.log(info);
