@@ -1,4 +1,4 @@
-import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import {DragDropContext, DropResult, Droppable} from "react-beautiful-dnd";
 import {useRecoilState} from "recoil";
 import styled from "styled-components";
 import {todoState} from "../atoms";
@@ -16,7 +16,8 @@ function TodoList() {
   const [todos, setTodos] = useRecoilState<ITodoList>(todoState);
 
   const onDragEnd = (info: DropResult) => {
-    const {destination, source} = info;
+    const {destination, source, draggableId} = info;
+    console.log(info, '드래그 확인')
     if (!destination) return;
     // board ID 체크하기
     if (destination?.droppableId === source.droppableId) {
@@ -34,8 +35,12 @@ function TodoList() {
           [source.droppableId]: boardCopy,
         };
       });
-    }
-    if (destination?.droppableId !== source.droppableId) {
+    } else if(destination?.droppableId === "delete") {
+       setTodos((prev) => {
+         const updateTodo = todos[source.droppableId].filter((todo) => String(todo.id) !== draggableId);
+         return {...prev, [source.droppableId]: updateTodo};
+       });
+    } else if (destination?.droppableId !== source.droppableId) {
       setTodos((allBoards) => {
         // 출발할 보드 , 도착할 보드 복사하기
         const sourceBoard = [...allBoards[source.droppableId]];
@@ -63,17 +68,27 @@ function TodoList() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Title>🏁 My Todo List 🏁</Title>
-      <DeleteIcon>
-        <FontAwesomeIcon icon={faTrash} />
-      </DeleteIcon>
+      <Droppable droppableId={"delete"}>
+        {(magic, info) => (
+          <>
+            <DeleteArea
+              isDraggingOver={info.isDraggingOver}
+              ref={magic.innerRef}
+              {...magic.droppableProps}
+            >
+              <DelIcon>
+                <FontAwesomeIcon icon={faTrash} />
+              </DelIcon>
+              <div>drag and drop!</div>
+              {magic.placeholder}
+            </DeleteArea>
+          </>
+        )}
+      </Droppable>
       <Wrapper>
         <Boards>
           {Object.keys(todos).map((boardId) => (
-            <Board 
-              key={boardId} 
-              boardId={boardId} 
-              todos={todos[boardId]} 
-            />
+            <Board key={boardId} boardId={boardId} todos={todos[boardId]} />
           ))}
           <AddBoard onSubmit={handleSubmit(onValid)}>
             <AddButton>+</AddButton>
@@ -118,13 +133,29 @@ const AddBoard = styled.form`
   height: 120px;
   border-radius: 5px;
 `;
-const DeleteIcon = styled.div`
+interface IDelProps {
+  isDraggingOver: boolean;
+}
+const DeleteArea = styled.div<IDelProps>`
+  background-color: ${(props) =>
+    props.isDraggingOver ? "#ef9da9" : "#b2bec3"};
   color: white;
-  width: 60px;
-  font-size: 30px;
+  width: 120px;
+  height: 70px;
   position: absolute;
-  right: 10px;
+  right: 35px;
   top: 30px;
+  border-radius: 14px;
+  div:nth-child(2){
+    text-align: center;
+    margin-top: 6px;
+  }
+`;
+const DelIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  padding-top: 10px;
 `;
 const Title = styled.div`
   font-weight: bold;
@@ -139,10 +170,11 @@ const Wrapper = styled.div`
   width: 100vw;
   margin: 0 auto;
   margin-top: 30px;
-  height: 100vh;
+  /* height: 100vh; */
 `;
 const Boards = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 300px);
   justify-content: center;
   align-items: flex-start;
   width: 100%;
