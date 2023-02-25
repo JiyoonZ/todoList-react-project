@@ -1,20 +1,19 @@
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import {useRecoilState} from "recoil";
 import styled from "styled-components";
-import {todoState, IForm} from "../atoms";
+import {todoState} from "../atoms";
 import Board, {Button} from "./Board";
-
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {useForm} from "react-hook-form";
+import { ITodoList } from "../type";
 
+export interface IForm {
+  board: string;
+}
 function TodoList() {
   const {register, setValue, handleSubmit} = useForm<IForm>();
-  const [todos, setTodos] = useRecoilState(todoState);
-  console.log(todos, 'test', JSON.parse(
-  localStorage.getItem("categories") as string
-));
-
+  const [todos, setTodos] = useRecoilState<ITodoList>(todoState);
 
   const onDragEnd = (info: DropResult) => {
     const {destination, source} = info;
@@ -71,7 +70,11 @@ function TodoList() {
       <Wrapper>
         <Boards>
           {Object.keys(todos).map((boardId) => (
-            <Board boardId={boardId} key={boardId} todos={todos[boardId]} />
+            <Board 
+              key={boardId} 
+              boardId={boardId} 
+              todos={todos[boardId]} 
+            />
           ))}
           <AddBoard onSubmit={handleSubmit(onValid)}>
             <AddButton>+</AddButton>
@@ -115,7 +118,6 @@ const AddBoard = styled.form`
   width: 150px;
   height: 120px;
   border-radius: 5px;
-  /* background-color: rgba(0, 0, 0, 0.4); */
 `;
 const DeleteIcon = styled.div`
   color: white;
@@ -138,9 +140,6 @@ const Wrapper = styled.div`
   width: 100vw;
   margin: 0 auto;
   margin-top: 30px;
-  /* border: 1px solid white; */
-  /* justify-content: center; */
-  /* align-items: center; */
   height: 100vh;
 `;
 const Boards = styled.div`

@@ -2,78 +2,16 @@ import {Droppable} from "react-beautiful-dnd";
 import {useForm} from "react-hook-form";
 import {useSetRecoilState} from "recoil";
 import styled from "styled-components";
-import {ITodo, todoState} from "../atoms";
+import {todoState} from "../atoms";
+import {IBoard, ITodoList} from "../type";
 import DraggableCard from "./DraggableCard";
 
-const Wrapper = styled.div`
-  width: 300px;
-  padding: 15px 0;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 5px;
-  min-height: 300px;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
-`;
-const Title = styled.div`
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 15px;
-`;
-interface IAreaProps {
-  isDraggingOver: boolean;
-  draggingFromThisWith: boolean;
-}
-const Area = styled.div<IAreaProps>`
-  background-color: ${(props) =>
-    props.isDraggingOver
-      ? "#dfe6e9"
-      : props.draggingFromThisWith
-      ? "#b2bec3"
-      : "transparent"};
-  flex-grow: 1;
-  transition: background-color 0.3s ease-in-out;
-  padding: 20px;
-`;
-const Form = styled.form`
-  width: 80%;
-  margin: auto;
-  &:focus {
-    border: none;
-  }
-`;
-const Input = styled.input`
-  border: none;
-  width: 90%;
-  height: 40px;
-  font-size: 18px;
-  background-color: transparent;
-  border-bottom: 3px dotted white;
-  outline: none;
-`;
-export const Button = styled.button`
-  /* outline: none; */
-  border: none;
-  background-color: ${(props) => props.theme.bgColor};
-  width: 20px;
-  height: 20px;
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
-  border-radius: 50%;
-  cursor: pointer;
-`;
-interface IBoard {
-  todos: ITodo[];
-  boardId: string;
-}
 interface IForm {
   todo: string;
 }
 function Board({todos, boardId}: IBoard) {
   const {register, handleSubmit, setValue} = useForm<IForm>();
-  const setTodos = useSetRecoilState(todoState);
+  const setTodos = useSetRecoilState<ITodoList>(todoState);
 
   const onValid = ({todo}: IForm) => {
     const newTodo = {
@@ -147,3 +85,62 @@ const DelBtn = styled.button`
   cursor: pointer;
 `;
 export default Board;
+
+const Wrapper = styled.div`
+  width: 300px;
+  padding: 15px 0;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 5px;
+  min-height: 300px;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
+`;
+const Title = styled.div`
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 15px;
+`;
+interface IAreaProps {
+  isDraggingOver: boolean;
+  draggingFromThisWith: boolean;
+}
+const Area = styled.div<IAreaProps>`
+  background-color: ${(props) =>
+    props.isDraggingOver
+      ? "#dfe6e9"
+      : props.draggingFromThisWith
+      ? "#b2bec3"
+      : "transparent"};
+  flex-grow: 1;
+  transition: background-color 0.3s ease-in-out;
+  padding: 20px;
+`;
+const Form = styled.form`
+  width: 80%;
+  margin: auto;
+  &:focus {
+    border: none;
+  }
+`;
+const Input = styled.input`
+  border: none;
+  width: 90%;
+  height: 40px;
+  font-size: 18px;
+  background-color: transparent;
+  border-bottom: 3px dotted white;
+  outline: none;
+`;
+export const Button = styled.button`
+  border: none;
+  background-color: ${(props) => props.theme.bgColor};
+  width: 20px;
+  height: 20px;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+`;
